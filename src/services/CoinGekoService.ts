@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import { ICryptoCurrency } from "@/models/ICrypto";
+import { ICoinChartData, ICoinData } from "@/models/ICoin";
 
 export const getCryptoCurrencies = async () => {
   try {
@@ -11,5 +12,36 @@ export const getCryptoCurrencies = async () => {
   } catch {
     console.log("Could not fetch cryptocurrencies");
     throw new Error("Could not fetch cryptocurrencies");
+  }
+};
+
+export const getCoinDataById = async (id: string) => {
+  try {
+    const response = await axios.get<ICoinData>(
+      `https://api.coingecko.com/api/v3/coins/${id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log(response.data);
+    return response;
+  } catch {
+    console.log("Could not fetch coin");
+    throw new Error("Could not fetch coin");
+  }
+};
+
+export const getCoinHistoricalChartById = async (id: string) => {
+  try {
+    const response = await axios.get<ICoinChartData>(
+      `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=365`
+    );
+    console.log(response.data);
+    return response;
+  } catch {
+    console.log("Could not fetch coin");
+    throw new Error("Could not fetch coin");
   }
 };

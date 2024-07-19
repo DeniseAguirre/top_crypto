@@ -14,13 +14,19 @@ import { formatCurrency } from "@/utils/formatCurrency";
 import { formatPercentage } from "@/utils/formatPercentage";
 
 import Image from "next/image";
-import { formatDate } from "@/utils/formatDate";
 
 const REFRESH_INTERVAL = 60000;
 
-export default function CryptoTable() {
+interface CryptoTableProps {
+  lastUpdated: Date | null;
+  setLastUpdated: React.Dispatch<React.SetStateAction<Date | null>>;
+}
+
+export default function CryptoTable({
+  lastUpdated,
+  setLastUpdated,
+}: CryptoTableProps) {
   const [data, setData] = useState<ICryptoCurrency[]>([]);
-  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
   const fetchCryptoCurrencies = async () => {
     try {
@@ -42,82 +48,94 @@ export default function CryptoTable() {
   }, []);
 
   return (
-    <div style={{ marginTop: 16, color: "#fff" }}>
-      {lastUpdated
-        ? `Last update time: ${formatDate(lastUpdated)}`
-        : "Loading..."}
+    <TableContainer component={Paper}>
+      <Table
+        sx={{
+          minWidth: 650,
 
-      <TableContainer component={Paper}>
-        <Table
-          sx={{
-            minWidth: 650,
-          }}
-          aria-label="simple table"
-          className="bg-[#000] text-white"
-        >
-          <TableHead>
-            <TableRow>
-              <TableCell style={{ color: "#fff" }}>Assets</TableCell>
-              <TableCell style={{ color: "#fff" }} align="right">
-                Price
-              </TableCell>
-              <TableCell style={{ color: "#fff" }} align="right">
-                24H
-              </TableCell>
-              <TableCell style={{ color: "#fff" }} align="right">
-                Market cap
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.map((row, index) => (
-              <TableRow key={index}>
-                <TableCell component="th" scope="row">
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      color: "#fff",
-                    }}
-                  >
-                    <Image
-                      src={row.image}
-                      alt={row.name}
-                      width={24}
-                      height={24}
-                      style={{ marginRight: 8 }}
-                    />
-                    <div>
-                      <div>{row.name}</div>
-                      <div style={{ fontSize: "0.75rem", color: "gray" }}>
-                        {row.symbol.toUpperCase()}
-                      </div>
-                    </div>
-                  </div>
-                </TableCell>
-                <TableCell align="right" style={{ color: "#fff" }}>
-                  {formatCurrency(row.current_price)}
-                </TableCell>
-                <TableCell
-                  align="right"
+          "& .MuiTableCell-root": {
+            borderBottom: "1px solid #090909",
+          },
+        }}
+        aria-label="simple table"
+        className="dark:bg-gray-900 bg-slate-200 dark:text-white text-black"
+      >
+        <TableHead>
+          <TableRow>
+            <TableCell className="dark:text-white font-bold">Assets</TableCell>
+            <TableCell className="dark:text-white font-bold" align="right">
+              Price
+            </TableCell>
+            <TableCell className="dark:text-white font-bold" align="right">
+              Price change 24H
+            </TableCell>
+            <TableCell className="dark:text-white font-bold" align="right">
+              Market cap
+            </TableCell>
+            <TableCell className="dark:text-white font-bold" align="right">
+              Market cap change 24H
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {data.map((row, index) => (
+            <TableRow key={index}>
+              <TableCell component="th" scope="row">
+                <div
                   style={{
-                    color: row.price_change_percentage_24h
-                      .toString()
-                      .includes("-")
-                      ? "red"
-                      : "green",
+                    display: "flex",
+                    alignItems: "center",
                   }}
                 >
-                  {formatPercentage(row.price_change_percentage_24h)}
-                </TableCell>
-                <TableCell align="right" style={{ color: "#fff" }}>
-                  {formatCurrency(row.market_cap)}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </div>
+                  <Image
+                    src={row.image}
+                    alt={row.name}
+                    width={24}
+                    height={24}
+                    style={{ marginRight: 8 }}
+                  />
+                  <div>
+                    <div className="dark:text-white">{row.name}</div>
+                    <div style={{ fontSize: "0.75rem", color: "gray" }}>
+                      {row.symbol.toUpperCase()}
+                    </div>
+                  </div>
+                </div>
+              </TableCell>
+              <TableCell align="right" className="dark:text-white">
+                {formatCurrency(row.current_price)}
+              </TableCell>
+              <TableCell
+                align="right"
+                style={{
+                  color: row.price_change_percentage_24h
+                    .toString()
+                    .includes("-")
+                    ? "red"
+                    : "green",
+                }}
+              >
+                {formatPercentage(row.price_change_percentage_24h)}
+              </TableCell>
+              <TableCell align="right" className="dark:text-white">
+                {formatCurrency(row.market_cap)}
+              </TableCell>
+              <TableCell
+                align="right"
+                style={{
+                  color: row.market_cap_change_percentage_24h
+                    .toString()
+                    .includes("-")
+                    ? "red"
+                    : "green",
+                }}
+              >
+                {formatPercentage(row.market_cap_change_percentage_24h)}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 }
