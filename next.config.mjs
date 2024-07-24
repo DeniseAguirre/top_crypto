@@ -2,7 +2,13 @@
 
 const nextConfig = {
   images: {
-    domains: ["coin-images.coingecko.com"],
+    // domains: ["coin-images.coingecko.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+    ],
   },
 };
 
