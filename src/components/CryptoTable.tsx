@@ -12,7 +12,7 @@ import { getCryptoCurrencies } from "@/services/CoinGekoService";
 import { ICryptoCurrency } from "@/models/ICrypto";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { formatPercentage } from "@/utils/formatPercentage";
-
+import { useRouter } from "next/router";
 import Image from "next/image";
 
 const REFRESH_INTERVAL = 60000;
@@ -27,6 +27,8 @@ export default function CryptoTable({
   setLastUpdated,
 }: CryptoTableProps) {
   const [data, setData] = useState<ICryptoCurrency[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const router = useRouter();
 
   const fetchCryptoCurrencies = async () => {
     try {
@@ -35,6 +37,8 @@ export default function CryptoTable({
       setLastUpdated(new Date());
     } catch (error) {
       throw new Error("An error has ocurred: " + String(error));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -47,6 +51,14 @@ export default function CryptoTable({
     return () => clearInterval(interval);
   }, []);
 
+  const handleRowClick = (id: string) => {
+    if (router) {
+      router.push(`/details/${id}`);
+    } else {
+      console.error("Router is not available");
+    }
+  };
+
   return (
     <TableContainer component={Paper}>
       <Table
@@ -54,7 +66,7 @@ export default function CryptoTable({
           minWidth: 650,
 
           "& .MuiTableCell-root": {
-            borderBottom: "1px solid #090909",
+            borderBottom: "none",
           },
         }}
         aria-label="simple table"
@@ -62,24 +74,22 @@ export default function CryptoTable({
       >
         <TableHead>
           <TableRow>
-            <TableCell className="dark:text-white font-bold">Assets</TableCell>
-            <TableCell className="dark:text-white font-bold" align="right">
+            <TableCell className="dark:text-white font-thin">Assets</TableCell>
+            <TableCell className="dark:text-white font-thin" align="right">
               Price
             </TableCell>
-            <TableCell className="dark:text-white font-bold" align="right">
-              Price change 24H
+            <TableCell className="dark:text-white font-thin" align="right">
+              24H
             </TableCell>
-            <TableCell className="dark:text-white font-bold" align="right">
+            <TableCell className="dark:text-white font-thin" align="right">
               Market cap
-            </TableCell>
-            <TableCell className="dark:text-white font-bold" align="right">
-              Market cap change 24H
             </TableCell>
           </TableRow>
         </TableHead>
+
         <TableBody>
           {data.map((row, index) => (
-            <TableRow key={index}>
+            <TableRow hover key={row.id} onClick={() => handleRowClick(row.id)}>
               <TableCell component="th" scope="row">
                 <div
                   style={{
@@ -95,30 +105,15 @@ export default function CryptoTable({
                     style={{ marginRight: 8 }}
                   />
                   <div>
-                    <div className="dark:text-white">{row.name}</div>
+                    <div className="dark:text-white font-thin">{row.name}</div>
                     <div style={{ fontSize: "0.75rem", color: "gray" }}>
                       {row.symbol.toUpperCase()}
                     </div>
                   </div>
                 </div>
               </TableCell>
-              <TableCell align="right" className="dark:text-white">
+              <TableCell align="right" className="dark:text-white font-thin">
                 {formatCurrency(row.current_price)}
-              </TableCell>
-              <TableCell
-                align="right"
-                style={{
-                  color: row.price_change_percentage_24h
-                    .toString()
-                    .includes("-")
-                    ? "red"
-                    : "green",
-                }}
-              >
-                {formatPercentage(row.price_change_percentage_24h)}
-              </TableCell>
-              <TableCell align="right" className="dark:text-white">
-                {formatCurrency(row.market_cap)}
               </TableCell>
               <TableCell
                 align="right"
@@ -129,8 +124,12 @@ export default function CryptoTable({
                     ? "red"
                     : "green",
                 }}
+                className="font-thin"
               >
                 {formatPercentage(row.market_cap_change_percentage_24h)}
+              </TableCell>
+              <TableCell align="right" className="dark:text-white font-thin">
+                {formatCurrency(row.market_cap)}
               </TableCell>
             </TableRow>
           ))}
