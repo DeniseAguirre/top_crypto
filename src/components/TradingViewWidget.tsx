@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useRef } from "react";
 
 interface TradingViewWidgetProps {
@@ -16,19 +17,19 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({ symbol }) => {
       script.async = true;
       script.innerHTML = JSON.stringify({
         symbol: symbol + "USD",
-        width: 450,
+        width: "100%",
         height: 220,
         locale: "en",
         dateRange: "12M",
-        colorTheme: "dark",
+        //colorTheme: {isDarkMode ? "dark" : "light"},
         isTransparent: true,
-        autosize: false,
+        autosize: true,
         largeChartUrl: "",
       });
-
+      containerRef.current.innerHTML = "";
       containerRef.current.appendChild(script);
     }
-  }, []);
+  }, [symbol]);
 
   return (
     <div className="tradingview-widget-container" ref={containerRef}>
