@@ -113,7 +113,7 @@ export default function CryptoTable({
                 </div>
               </TableCell>
               <TableCell align="right" className="dark:text-white font-thin">
-                {formatCurrency(row.current_price)}
+                {formatCurrency(row.current_price, "USD")}
               </TableCell>
               <TableCell
                 align="right"
@@ -129,7 +129,7 @@ export default function CryptoTable({
                 {formatPercentage(row.market_cap_change_percentage_24h)}
               </TableCell>
               <TableCell align="right" className="dark:text-white font-thin">
-                {formatCurrency(row.market_cap)}
+                {formatCurrency(row.market_cap, "USD")}
               </TableCell>
             </TableRow>
           ))}
