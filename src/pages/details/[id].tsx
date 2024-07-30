@@ -4,7 +4,6 @@ import ThinkToday from "@/components/ThinkToday";
 import TradingViewWidget from "@/components/TradingViewWidget";
 import { ICoinData } from "@/models/ICoin";
 import { getCoinDataById } from "@/services/CoinGekoService";
-import { formatCurrency } from "@/utils/formatCurrency";
 import {
   Description,
   Forum,
@@ -30,7 +29,6 @@ export default function Details() {
   const fetchDetails = async (id: string) => {
     try {
       const response = await getCoinDataById(id);
-      console.log(response.data);
       setData(response.data);
     } catch (error) {
       throw new Error("An error has ocurred: " + String(error));
@@ -46,14 +44,14 @@ export default function Details() {
   }, [id]);
 
   return (
-    <div className="dark:bg-gray-900 bg-slate-200 dark:text-white text-black px-12 lg:px-24 min-h-screen">
+    <div className="dark:bg-gray-900 bg-slate-200 dark:text-white text-black lg:px-24 min-h-screen">
       {loading ? (
         <div className="flex justify-center items-center min-h-screen">
           <Circles color="#6b21a8" height={80} width={80} />
         </div>
       ) : (
         <>
-          <div className="flex flex-col-reverse lg:flex-row bg-gray-400 dark:bg-opacity-25 rounded-lg bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-10">
+          <div className="flex flex-col-reverse lg:flex-row bg-gray-400 dark:bg-opacity-25 lg:rounded-lg bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-10">
             <div className="contenedor1 lg:w-1/2 flex flex-col justify-items-start p-4">
               <TradingViewWidget symbol={data?.symbol || ""} />
               <div className="my-4"></div>
@@ -80,7 +78,9 @@ export default function Details() {
                       </span>
                       <MilitaryTech className="dark:text-white" />
                     </div>
-                    <div>{data?.market_data?.market_cap_rank || 0}</div>
+                    <div className="text-sm font-semibold">
+                      {data?.market_data?.market_cap_rank || 0}
+                    </div>
                   </div>
                   <hr className="my-4 border-gray-800" />
                 </div>
@@ -123,7 +123,6 @@ export default function Details() {
                 />
               )}
 
-              {/* aca va el componente*/}
               <ThinkToday
                 name={data?.name || ""}
                 symbol={data?.symbol || ""}
