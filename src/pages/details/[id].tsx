@@ -238,6 +238,7 @@ export default function Details() {
           </div>
         </>
       )}
+      <div className="p-4 bg-transparent"></div>
     </div>
   );
 }

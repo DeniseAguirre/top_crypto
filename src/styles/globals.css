@@ -32,3 +32,12 @@ body {
 .css-11xur9t-MuiPaper-root-MuiTableContainer-root {
   box-shadow: none !important;
 }
+
+
+.multicolor-letter {
+  background: linear-gradient(90deg, yellow, orange, purple, violet);
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
