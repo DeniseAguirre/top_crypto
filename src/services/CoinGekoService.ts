@@ -10,7 +10,6 @@ export const getCryptoCurrencies = async () => {
     );
     return response;
   } catch {
-    console.log("Could not fetch cryptocurrencies");
     throw new Error("Could not fetch cryptocurrencies");
   }
 };
@@ -25,10 +24,8 @@ export const getCoinDataById = async (id: string) => {
         },
       }
     );
-    console.log(response.data);
     return response;
   } catch {
-    console.log("Could not fetch coin");
     throw new Error("Could not fetch coin");
   }
 };
@@ -38,10 +35,8 @@ export const getCoinHistoricalChartById = async (id: string) => {
     const response = await axios.get<ICoinChartData>(
       `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=365`
     );
-    console.log(response.data);
     return response;
   } catch {
-    console.log("Could not fetch coin");
     throw new Error("Could not fetch coin");
   }
 };

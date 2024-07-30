@@ -16,7 +16,7 @@ function ThinkToday({ name, symbol, votesUp, votesDown }: ThinkTodayProps) {
       <h3 className="text-lg font-semibold mb-2">
         What do you think about {symbol.toUpperCase()} today?
       </h3>
-      <p className="text-sm font-light text-gray-500">
+      <p className="text-sm font-light text-gray-500 dark:text-gray-300">
         The community {isBullish ? "is bullish" : "is bearish"} on {name} (
         {symbol.toUpperCase()}) today.
       </p>

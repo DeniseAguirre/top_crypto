@@ -63,25 +63,33 @@ export default function CryptoTable({
     <TableContainer component={Paper}>
       <Table
         sx={{
-          minWidth: 650,
-
-          "& .MuiTableCell-root": {
-            borderBottom: "none",
-          },
+          minWidth: 450,
+          tableLayout: "auto",
+          // "& .MuiTableCell-root": {
+          //   borderBottom: "none",
+          // },
         }}
         aria-label="simple table"
-        className="dark:bg-gray-900 bg-slate-200 dark:text-white text-black"
+        className="dark:bg-gray-900 bg-slate-200 dark:text-white text-black text-sm"
       >
         <TableHead>
           <TableRow>
-            <TableCell className="dark:text-white font-thin">Assets</TableCell>
-            <TableCell className="dark:text-white font-thin" align="right">
+            <TableCell
+              className="dark:text-white font-semibold"
+              sx={{ minWidth: 150 }}
+            >
+              Assets
+            </TableCell>
+            <TableCell className="dark:text-white font-semibold" align="right">
               Price
             </TableCell>
-            <TableCell className="dark:text-white font-thin" align="right">
+            <TableCell className="dark:text-white font-semibold" align="right">
               24H
             </TableCell>
-            <TableCell className="dark:text-white font-thin" align="right">
+            <TableCell
+              className="hidden sm:table-cell dark:text-white font-semibold"
+              align="right"
+            >
               Market cap
             </TableCell>
           </TableRow>
@@ -90,13 +98,8 @@ export default function CryptoTable({
         <TableBody>
           {data.map((row, index) => (
             <TableRow hover key={row.id} onClick={() => handleRowClick(row.id)}>
-              <TableCell component="th" scope="row">
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
+              <TableCell component="th" scope="row" sx={{ minWidth: 150 }}>
+                <div className="flex flex-row items-center">
                   <Image
                     src={row.image}
                     alt={row.name}
@@ -106,7 +109,7 @@ export default function CryptoTable({
                   />
                   <div>
                     <div className="dark:text-white font-thin">{row.name}</div>
-                    <div style={{ fontSize: "0.75rem", color: "gray" }}>
+                    <div style={{ color: "gray" }}>
                       {row.symbol.toUpperCase()}
                     </div>
                   </div>
@@ -126,9 +129,15 @@ export default function CryptoTable({
                 }}
                 className="font-thin"
               >
+                {row.market_cap_change_percentage_24h.toString().includes("-")
+                  ? "▼"
+                  : "▲"}
                 {formatPercentage(row.market_cap_change_percentage_24h)}
               </TableCell>
-              <TableCell align="right" className="dark:text-white font-thin">
+              <TableCell
+                align="right"
+                className="hidden sm:table-cell dark:text-white font-thin"
+              >
                 {formatCurrency(row.market_cap, "USD")}
               </TableCell>
             </TableRow>
