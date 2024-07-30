@@ -30,10 +30,16 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Component {...pageProps} />
 
       <div className="p-4 flex justify-center">
-        <p>
-          Powered by{" "}
-          <span className="multicolor-letter">Denise Aguirre Martinez</span>
-        </p>
+        <a
+          href="https://www.linkedin.com/in/denise-aguirre-m/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <p>
+            Powered by{" "}
+            <span className="multicolor-letter">Denise Aguirre Martinez</span>
+          </p>
+        </a>
       </div>
     </div>
   );
