@@ -28,6 +28,13 @@ function MyApp({ Component, pageProps }: AppProps) {
         <DarkModeToggle />
       </div>
       <Component {...pageProps} />
+
+      <div className="p-4 flex justify-center">
+        <p>
+          Powered by{" "}
+          <span className="multicolor-letter">Denise Aguirre Martinez</span>
+        </p>
+      </div>
     </div>
   );
 }
