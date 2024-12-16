@@ -2,16 +2,7 @@
 import { useState, useEffect } from "react";
 
 export default function DarkModeToggle() {
-  const [darkMode, setDarkMode] = useState(false);
-
-  useEffect(() => {
-    const root = window.document.documentElement;
-    const initialColorValue = root.style.getPropertyValue(
-      "--initial-color-mode"
-    );
-
-    setDarkMode(initialColorValue === "dark");
-  }, []);
+  const [darkMode, setDarkMode] = useState(true);
 
   useEffect(() => {
     if (darkMode) {
