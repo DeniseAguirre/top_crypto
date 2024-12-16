@@ -25,7 +25,7 @@ interface CryptoTableProps {
 export default function CryptoTable({
   lastUpdated,
   setLastUpdated,
-}: CryptoTableProps) {
+}: Readonly<CryptoTableProps>) {
   const [data, setData] = useState<ICryptoCurrency[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
@@ -60,17 +60,20 @@ export default function CryptoTable({
   };
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer
+      component={Paper}
+      sx={{ backgroundColor: "transparent", boxShadow: "none" }}
+    >
       <Table
         sx={{
           minWidth: 450,
           tableLayout: "auto",
-          // "& .MuiTableCell-root": {
-          //   borderBottom: "none",
-          // },
+          "& .MuiTableCell-root": {
+            borderBottom: "none",
+          },
         }}
         aria-label="simple table"
-        className="dark:bg-gray-900 bg-slate-200 dark:text-white text-black text-sm"
+        className="bg-transparent dark:text-white text-black text-sm"
       >
         <TableHead>
           <TableRow>
@@ -97,7 +100,14 @@ export default function CryptoTable({
 
         <TableBody>
           {data.map((row, index) => (
-            <TableRow hover key={row.id} onClick={() => handleRowClick(row.id)}>
+            <TableRow
+              hover
+              key={row.id}
+              onClick={() => handleRowClick(row.id)}
+              sx={{
+                cursor: "pointer",
+              }}
+            >
               <TableCell component="th" scope="row" sx={{ minWidth: 150 }}>
                 <div className="flex flex-row items-center">
                   <Image
