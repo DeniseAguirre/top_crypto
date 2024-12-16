@@ -6,6 +6,9 @@ import DarkModeToggle from "@/components/DarkModeToggle";
 import { useRouter } from "next/router";
 import { IconButton } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
+import BlurredBackground from "@/components/BlurredBackground";
+import ThemeToggle from "@/components/ThemeToggle";
+import { useEffect, useState } from "react";
 const inter = Inter({ subsets: ["latin"] });
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -14,19 +17,31 @@ function MyApp({ Component, pageProps }: AppProps) {
     router.back();
   };
 
-  return (
-    <div className={inter.className}>
-      <div className="flex justify-between dark:bg-gray-900 bg-slate-200 dark:text-white text-black p-4">
-        <div className="flex items-center">
-          {router.pathname !== "/" && (
-            <IconButton aria-label="back" size="large" onClick={handleBack}>
-              <ArrowBack fontSize="inherit" className="dark:text-white" />
-            </IconButton>
-          )}
-        </div>
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
-        <DarkModeToggle />
+  useEffect(() => {
+    // Verificar la preferencia del sistema
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+    setIsDarkMode(prefersDark);
+  }, []);
+
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
+  return (
+    <BlurredBackground isDarkMode={isDarkMode}>
+      <ThemeToggle isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
+      <div className="flex items-center">
+        {router.pathname !== "/" && (
+          <IconButton aria-label="back" size="large" onClick={handleBack}>
+            <ArrowBack fontSize="inherit" className="dark:text-white" />
+          </IconButton>
+        )}
       </div>
+
       <Component {...pageProps} />
 
       <div className="p-4 flex justify-center">
@@ -35,13 +50,13 @@ function MyApp({ Component, pageProps }: AppProps) {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <p>
+          <p className="dark:text-white text-black">
             Powered by{" "}
             <span className="multicolor-letter">Denise Aguirre Martinez</span>
           </p>
         </a>
       </div>
-    </div>
+    </BlurredBackground>
   );
 }
 
